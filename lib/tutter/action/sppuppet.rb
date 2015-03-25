@@ -130,14 +130,8 @@ MERGE_MSG
     rescue Octokit::MethodNotAllowed => e
       return post_comment(pull_request_id, "Pull request not mergeable: #{e.message}")
     end
+    # Why do we print this? /elipsion
     puts merge_commit.inspect
-    json[:merge_sha] = merge_commit.sha
-    report_directory = "#{@settings['reports_dir']}/#{merge_commit.sha[0..1]}/#{merge_commit.sha[2..3]}"
-    report_path = "#{report_directory}/#{merge_commit.sha}.json"
-    if @settings['generate_reports']
-      FileUtils.mkdir_p report_directory
-      File.open(report_path, 'w') { |f| f.write(JSON.pretty_generate(json)) }
-    end
     return 200, "merging #{pull_request_id} #{@project}"
   end
 
